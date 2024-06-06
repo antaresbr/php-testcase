@@ -8,56 +8,81 @@ use Antares\Tests\TestCase\Models\UserGroup;
 
 trait SeedDatabaseTrait
 {
-    private $defaultUserCount = 30;
-    private $defaultGroupCount = 5;
-    private $defaultUserGroupCount = 10;
+    protected $defaultUserCount = 30;
+    protected $defaultGroupCount = 5;
+    protected $defaultUserGroupCount = 10;
 
-    private function seedUsers(?int $amount = null)
-    {
-        !is_null($amount) or $amount = $this->defaultUserCount; 
-        return User::factory()->count($amount)->create();
+    public $userModelClass;
+    public $groupModelClass;
+    public $userGroupModelClass;
+
+    protected function getUserModelClass() {
+        if (is_null($this->userModelClass)) {
+            $this->userModelClass = User::class;
+        }
+        return $this->userModelClass;
     }
 
-    private function seedAndTestUsers(?int $amount = null)
+    protected function getGroupModelClass() {
+        if (is_null($this->groupModelClass)) {
+            $this->groupModelClass = Group::class;
+        }
+        return $this->groupModelClass;
+    }
+
+    protected function getUserGroupModelClass() {
+        if (is_null($this->userGroupModelClass)) {
+            $this->userGroupModelClass = UserGroup::class;
+        }
+        return $this->userGroupModelClass;
+    }
+
+    protected function seedUsers(?int $amount = null)
+    {
+        !is_null($amount) or $amount = $this->defaultUserCount; 
+        return $this->getUserModelClass()::factory()->count($amount)->create();
+    }
+
+    protected function seedAndTestUsers(?int $amount = null)
     {
         !is_null($amount) or $amount = $this->defaultUserCount; 
         $data = $this->seedUsers($amount);
-        $this->assertInstanceOf(User::class, $data[rand(1, $amount) - 1]);
-        $this->assertCount($amount, User::all());
+        $this->assertInstanceOf($this->getUserModelClass(), $data[rand(1, $amount) - 1]);
+        $this->assertCount($amount, $this->getUserModelClass()::all());
         return $data;
     }
 
-    private function seedGroups(?int $amount = null)
+    protected function seedGroups(?int $amount = null)
     {
         !is_null($amount) or $amount = $this->defaultGroupCount; 
-        return Group::factory()->count($amount)->create();
+        return $this->getGroupModelClass()::factory()->count($amount)->create();
     }
 
-    private function seedAndTestGroups(?int $amount = null)
+    protected function seedAndTestGroups(?int $amount = null)
     {
         !is_null($amount) or $amount = $this->defaultGroupCount; 
         $data = $this->seedGroups($amount);
-        $this->assertInstanceOf(Group::class, $data[rand(1, $amount) - 1]);
-        $this->assertCount($amount, Group::all());
+        $this->assertInstanceOf($this->getGroupModelClass(), $data[rand(1, $amount) - 1]);
+        $this->assertCount($amount, $this->getGroupModelClass()::all());
         return $data;
     }
 
-    private function seedUserGroups(?int $amount = null)
+    protected function seedUserGroups(?int $amount = null)
     {
         !is_null($amount) or $amount = $this->defaultUserGroupCount; 
-        return UserGroup::factory()->count($amount)->create();
+        return $this->getUserGroupModelClass()::factory()->count($amount)->create();
     }
 
-    private function seedAndTestUserGroups(?int $amount = null)
+    protected function seedAndTestUserGroups(?int $amount = null)
     {
         !is_null($amount) or $amount = $this->defaultUserGroupCount; 
         $data = $this->seedUserGroups($amount);
-        $this->assertInstanceOf(UserGroup::class, $data[rand(1, $amount) - 1]);
-        $this->assertCount($amount, UserGroup::all());
+        $this->assertInstanceOf($this->getUserGroupModelClass(), $data[rand(1, $amount) - 1]);
+        $this->assertCount($amount, $this->getUserGroupModelClass()::all());
         return $data;
     }
 
-    private function seedDatabase(
+    protected function seedDatabase(
         int $users = 30,
         int $groups = 5,
         int $userGroups = 10,

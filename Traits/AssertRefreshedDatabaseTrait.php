@@ -8,7 +8,7 @@ use Antares\Tests\TestCase\Models\UserGroup;
 
 trait AssertRefreshedDatabaseTrait
 {
-    private function assertRefreshedDatabase()
+    protected function assertRefreshedDatabase()
     {
         $this->assertCount(0, User::all());
         $this->assertCount(0, Group::all());

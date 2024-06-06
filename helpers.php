@@ -1,5 +1,8 @@
 <?php
 
+use Antares\Foundation\Arr;
+use Antares\Tests\TestCase\AbstractTestCase;
+
 if (!function_exists('ai_testcase_path')) {
     /**
      * Return the path of the resource relative to the package

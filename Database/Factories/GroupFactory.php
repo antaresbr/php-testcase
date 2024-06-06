@@ -26,8 +26,10 @@ class GroupFactory extends Factory
             'iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi',
             'Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega',
         ];
+        $name = $this->faker->randomElement($greekAlphabet) . ' - ' . rand(100, 999) . '/' . rand(100, 999);
         return [
-            'name' => $this->faker->randomElement($greekAlphabet),
+            'name' => $name,
+            'description' => ucwords("{$name} - Group"),
         ];
     }
 }
